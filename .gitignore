@@ -1,0 +1,4 @@
+# Arquivos de sistema/editor que não precisam ser versionados
+.DS_Store
+Thumbs.db
+*.log

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Qual é o seu Presidente Ideal? | Quiz</title>
+  <meta name="description" content="Responda 8 perguntas e descubra qual arquétipo fictício combina mais com você." />
+
+  <!-- Open Graph básico -->
+  <!-- TODO: adicionar og:image e og:url quando o domínio final estiver definido -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Qual é o seu Presidente Ideal? | Quiz" />
+  <meta property="og:description" content="Responda 8 perguntas e descubra qual arquétipo fictício combina mais com você." />
+
+  <!-- Twitter Card básico -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Qual é o seu Presidente Ideal? | Quiz" />
+  <meta name="twitter:description" content="Responda 8 perguntas e descubra qual arquétipo fictício combina mais com você." />
+
+  <!-- Fonte do Google Fonts (opcional — o site funciona offline sem ela também) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <main class="quiz-container">
+
+    <!-- Tela 1: Inicial -->
+    <section id="tela-inicio" class="tela tela-ativa">
+      <div class="conteudo-inicio">
+        <span class="badge-quiz">QUIZ</span>
+        <h1>Qual é o seu Presidente Ideal?</h1>
+        <p class="subtitulo">
+          Responda 8 perguntas completamente questionáveis e descubra qual arquétipo
+          político fictício combina com você.
+        </p>
+        <button id="btn-comecar" class="botao-primario">Começar o quiz →</button>
+        <p class="nota-rodape">Quiz fictício. Feito para entretenimento.</p>
+      </div>
+    </section>
+
+    <!-- Tela 2: Perguntas -->
+    <section id="tela-perguntas" class="tela" aria-labelledby="texto-pergunta">
+      <button id="btn-voltar" type="button" class="botao-voltar" hidden aria-label="Voltar para a pergunta anterior">
+        ← Voltar
+      </button>
+
+      <div class="barra-progresso-container" role="progressbar" aria-valuemin="1" aria-valuemax="8" aria-valuenow="1" aria-label="Progresso do quiz">
+        <div class="barra-progresso-preenchida" id="barra-progresso"></div>
+      </div>
+
+      <div id="conteudo-pergunta">
+        <p class="contador-perguntas" id="contador-perguntas">PERGUNTA 1 DE 8</p>
+        <h2 id="texto-pergunta" class="texto-pergunta" tabindex="-1"></h2>
+        <div id="lista-opcoes" class="lista-opcoes" role="group"></div>
+      </div>
+    </section>
+
+    <!-- Tela 3: Captura de lead -->
+    <section id="tela-lead" class="tela">
+      <div class="conteudo-lead">
+        <h2>Seu resultado está pronto 👀</h2>
+        <p>
+          Quer receber seu resultado completo e um raio-x da sua personalidade
+          financeiro-política no WhatsApp?
+        </p>
+        <form id="form-lead" class="form-lead" novalidate>
+          <div class="campo-lead">
+            <label for="input-nome">Nome</label>
+            <input type="text" id="input-nome" name="nome" placeholder="Seu nome" required />
+            <span class="erro-campo" id="erro-nome" aria-live="polite"></span>
+          </div>
+          <div class="campo-lead">
+            <label for="input-whatsapp">WhatsApp</label>
+            <input type="tel" id="input-whatsapp" name="whatsapp" placeholder="(11) 91234-5678" inputmode="numeric" required />
+            <span class="erro-campo" id="erro-whatsapp" aria-live="polite"></span>
+          </div>
+          <div class="campo-lead">
+            <label for="input-email">E-mail (opcional)</label>
+            <input type="email" id="input-email" name="email" placeholder="Seu e-mail" />
+            <span class="erro-campo" id="erro-email" aria-live="polite"></span>
+          </div>
+          <button type="submit" id="btn-enviar-lead" class="botao-primario">Ver meu resultado</button>
+        </form>
+        <a href="#" id="link-pular" class="link-pular">Só quero ver meu resultado</a>
+        <p class="nota-privacidade">
+          Seus dados serão usados apenas para enviar seu resultado e comunicações da NEXA.
+        </p>
+      </div>
+    </section>
+
+    <!-- Tela 4: Resultado -->
+    <section id="tela-resultado" class="tela">
+      <p class="rotulo-secao">SEU RESULTADO</p>
+
+      <div class="card-resultado" id="card-resultado">
+        <span class="emoji-resultado" id="resultado-emoji"></span>
+        <h2 id="resultado-nome"></h2>
+        <p class="resultado-tagline" id="resultado-tagline"></p>
+        <p class="resultado-descricao" id="resultado-descricao"></p>
+      </div>
+
+      <div class="perfil-resultado">
+        <p class="rotulo-secao">SEU PERFIL</p>
+        <div class="barra-compatibilidade-container" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Percentual de compatibilidade com o arquétipo">
+          <div class="barra-compatibilidade-preenchida" id="barra-compatibilidade"></div>
+        </div>
+        <p class="texto-compatibilidade" id="texto-compatibilidade"></p>
+        <ul class="lista-caracteristicas" id="lista-caracteristicas"></ul>
+      </div>
+
+      <div class="acoes-resultado">
+        <button id="btn-compartilhar" class="botao-primario">Compartilhar meu resultado</button>
+        <button id="btn-refazer" class="botao-secundario">Refazer quiz</button>
+        <p class="feedback-compartilhar" id="feedback-compartilhar" aria-live="polite"></p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Cliente do Supabase (opcional): só é usado se as credenciais forem preenchidas
+       em lead-handler.js (veja supabase-schema.sql). Se o CDN falhar ou não estiver
+       configurado, o app cai de volta pro fallback em localStorage sem quebrar. -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Ordem importa: dados primeiro, depois lead-handler, depois a lógica principal -->
+  <script src="archetypes.js"></script>
+  <script src="questions.js"></script>
+  <script src="lead-handler.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
