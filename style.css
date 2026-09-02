@@ -104,8 +104,57 @@ body {
   line-height: 1.25;
 }
 
+.emoji-topo {
+  font-size: 44px;
+  line-height: 1;
+}
+
+.subtitulo-destaque {
+  font-size: 15px;
+  font-weight: 700;
+  color: #7c3aed;
+}
+
 .subtitulo {
   font-size: 15px;
+  color: var(--texto-secundario);
+  line-height: 1.5;
+}
+
+/* ---------- Tela de explicação, transição de perfil, nome e análise ----------
+   Compartilham o mesmo layout centralizado da tela inicial/lead. */
+.conteudo-explicacao,
+.conteudo-transicao,
+.conteudo-nome,
+.conteudo-analisando {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.lista-explicacao {
+  list-style: none;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+.lista-explicacao li {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--texto-principal);
+  background: var(--cinza-claro);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.conteudo-transicao p,
+.conteudo-analisando p {
+  font-size: 14px;
   color: var(--texto-secundario);
   line-height: 1.5;
 }
@@ -220,10 +269,139 @@ body {
   outline: none; /* recebe foco via JS a cada pergunta, sem contorno permanente indesejado */
 }
 
-.lista-opcoes {
+.area-resposta {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.categoria-chip {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--texto-secundario);
+  background: var(--cinza-claro);
+  padding: 5px 12px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+/* ---------- Botões de proposta (mecânica de match) ---------- */
+.btn-proposta {
+  width: 100%;
+  min-height: 56px;
+  padding: 14px 16px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: inherit;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.1s ease, opacity 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-proposta--sim {
+  color: #e11d48;
+  background: #fff1f2;
+  border-color: #fecdd3;
+}
+
+.btn-proposta--sim:hover {
+  border-color: #fb7185;
+}
+
+.btn-proposta--nao {
+  color: var(--texto-secundario);
+  background: var(--cinza-claro);
+  border-color: var(--cinza-borda);
+}
+
+.btn-proposta--nao:hover {
+  border-color: #9ca3af;
+}
+
+.btn-proposta--pular {
+  color: #9ca3af;
+  background: transparent;
+  border: 2px dashed var(--cinza-borda);
+  font-weight: 600;
+  font-size: 14px;
+  min-height: 44px;
+}
+
+.btn-proposta--pular:hover {
+  border-color: #9ca3af;
+}
+
+.btn-proposta:active {
+  transform: scale(0.98);
+}
+
+.btn-proposta--selecionado.btn-proposta--sim {
+  border-color: #e11d48;
+}
+
+.btn-proposta--selecionado.btn-proposta--nao {
+  border-color: #6b7280;
+}
+
+.btn-proposta--selecionado.btn-proposta--pular {
+  border-color: #9ca3af;
+  color: #6b7280;
+}
+
+/* Microinterações ao responder: pulso pro SIM, tremor curto pro NÃO, deslize neutro pro PULAR */
+.anim-sim {
+  animation: pulseSim 0.3s ease;
+}
+
+@keyframes pulseSim {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.anim-nao {
+  animation: tremorNao 0.3s ease;
+}
+
+@keyframes tremorNao {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(-6px);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.anim-pular {
+  animation: deslizePular 0.3s ease;
+}
+
+@keyframes deslizePular {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(6px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 /* Fade + slide horizontal curto a cada troca de pergunta */
@@ -389,7 +567,22 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+}
+
+.rotulo-match {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.95;
+}
+
+.intro-resultado {
+  font-size: 14px;
+  line-height: 1.4;
+  opacity: 0.95;
+  margin-bottom: 4px;
 }
 
 .emoji-resultado {
@@ -400,19 +593,36 @@ body {
 .card-resultado h2 {
   font-size: 23px;
   font-weight: 800;
+  text-transform: uppercase;
+}
+
+.resultado-perfil {
+  font-size: 14px;
+  opacity: 0.85;
+  margin-top: -4px;
+}
+
+.resultado-compatibilidade {
+  font-size: 15px;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.18);
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-top: 4px;
 }
 
 .resultado-tagline {
   font-size: 15px;
   font-style: italic;
   opacity: 0.9;
+  margin-top: 4px;
 }
 
-.resultado-descricao {
-  font-size: 14px;
-  line-height: 1.6;
-  opacity: 0.95;
-  margin-top: 8px;
+.resultado-disclaimer {
+  font-size: 10px;
+  opacity: 0.75;
+  line-height: 1.4;
+  margin-top: 10px;
 }
 
 .perfil-resultado {
@@ -428,16 +638,35 @@ body {
   text-align: left;
 }
 
-.barra-compatibilidade-container {
+.lista-categorias {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.categoria-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.categoria-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--texto-principal);
+}
+
+.categoria-barra-fundo {
   width: 100%;
-  height: 12px;
+  height: 8px;
   background: var(--cinza-claro);
   border-radius: 8px;
   overflow: hidden;
-  margin-bottom: 8px;
 }
 
-.barra-compatibilidade-preenchida {
+.categoria-barra-preenchida {
   height: 100%;
   width: 0%;
   background: linear-gradient(90deg, var(--bg-gradiente-inicio), var(--bg-gradiente-fim));
@@ -487,6 +716,49 @@ body {
   font-weight: 600;
   color: #16a34a;
   margin-top: 10px;
+}
+
+/* ---------- Tela de análise (suspense curto) ---------- */
+.spinner-analisando {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.spinner-analisando span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--bg-gradiente-inicio), var(--bg-gradiente-fim));
+  animation: bounceDot 1s ease-in-out infinite;
+}
+
+.spinner-analisando span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.spinner-analisando span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes bounceDot {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.texto-analisando {
+  font-size: 16px;
+  font-weight: 700;
+  min-height: 24px;
 }
 
 /* ---------- Acessibilidade: prefers-reduced-motion ---------- */

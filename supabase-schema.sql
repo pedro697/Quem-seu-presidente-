@@ -11,8 +11,8 @@ create table if not exists public.leads (
   whatsapp text not null,
   email text,
   resultado text not null,
-  -- Resposta completa (texto da alternativa) das perguntas 1 e 2 do quiz — os dados
-  -- de qualificação de lead que mais interessam pro negócio.
+  -- Dados de perfil (texto da alternativa escolhida) — ver bloco "V2" no fim deste
+  -- arquivo pra saber de onde vêm hoje (perguntas de perfil, não mais das propostas).
   onde_mora text,
   situacao_trabalho text,
   criado_em timestamptz not null default now()
@@ -34,3 +34,15 @@ create policy "Permitir insercao publica de leads"
 -- 100% client-side), ninguém consegue ler, editar ou apagar os leads pelo site.
 -- Pra consultar os dados, use o Table Editor ou o SQL Editor do painel do Supabase
 -- (autenticado com sua conta, que não passa pelas regras de RLS do papel "anon").
+
+-- ============================================================================
+-- V2 — mecânica de match: adiciona compatibilidade (%) e mais dados de perfil.
+-- São ALTER TABLE aditivos (IF NOT EXISTS), seguros de rodar de novo numa tabela
+-- que já existe — não precisa recriar nada nem apagar os leads já salvos.
+-- onde_mora e situacao_trabalho já existiam desde a V1 e continuam sendo usadas,
+-- só que agora vêm das novas perguntas de perfil em vez das duas primeiras propostas.
+-- ============================================================================
+
+alter table public.leads add column if not exists compatibilidade integer;
+alter table public.leads add column if not exists faixa_etaria text;
+alter table public.leads add column if not exists plataforma text;

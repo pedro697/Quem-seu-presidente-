@@ -1,78 +1,135 @@
 // questions.js
-// As 8 perguntas do quiz. Cada opção soma pontos para 1 ou 2 arquétipos
-// (chave = código do arquétipo em archetypes.js, valor = pontos).
+// Somente as propostas do quiz (mecânica de match) e seus pesos por arquétipo.
+// Cada proposta pertence a uma categoria (usada na barra "SEU PERFIL" do resultado)
+// e tem um "rotulo" curto (usado em "POR QUE DEU MATCH?"). Nenhuma proposta cita
+// pessoa, partido ou candidato real — são afirmações neutras e fictícias.
+//
+// Modelo de pontuação v2: cada proposta tem um trade-off explícito (SIM e NÃO são
+// escolhas reais, não consensuais). Quem "concorda" com a proposta ganha +1 se o
+// usuário responde SIM e -1 se responde NÃO; quem "discorda" é o espelho disso
+// (+1 no NÃO, -1 no SIM). Arquétipos não listados ficam neutros (0) na pergunta.
+//
+// Formato de cada proposta:
+// { id, categoria, texto, rotulo, sim: {CODIGO: pontos}, nao: {CODIGO: pontos}, pular: {} }
+// "pular" nunca soma pontos — existe só pra deixar o formato de dados explícito.
+
+// Metadados de exibição de cada categoria (emoji + nome), usados na barra "SEU PERFIL".
+const CATEGORIA_INFO = {
+  economia: { emoji: '💰', nome: 'Economia' },
+  meio_ambiente: { emoji: '🌱', nome: 'Meio ambiente' },
+  empreendedorismo: { emoji: '🏢', nome: 'Empreendedorismo' },
+  seguranca: { emoji: '🛡️', nome: 'Segurança' },
+  comunicacao: { emoji: '📱', nome: 'Comunicação' },
+  campo: { emoji: '🚜', nome: 'Campo' },
+};
 
 const QUESTIONS = [
   {
-    pergunta: 'Onde você mora?',
-    opcoes: [
-      { texto: 'Centro de uma capital grande e agitada', pontos: { CEO: 2, ZAP: 1 } },
-      { texto: 'Bairro tranquilo de cidade média', pontos: { FAMILIA: 2, BOLETO: 1 } },
-      { texto: 'Cidade do interior, todo mundo se conhece', pontos: { AGRO: 2, FAMILIA: 1 } },
-      { texto: 'Zona rural, sítio ou fazenda', pontos: { AGRO: 2, VERDE: 1 } },
-    ],
+    id: 1,
+    categoria: 'economia',
+    texto: 'Reduzir bastante o Bolsa Família e outros programas sociais pra abrir espaço no orçamento e baixar impostos.',
+    rotulo: 'Corte de programas sociais',
+    sim: { BOLETO: 1, CEO: 1, FAMILIA: -1, ZAP: -1 },
+    nao: { BOLETO: -1, CEO: -1, FAMILIA: 1, ZAP: 1 },
+    pular: {},
   },
   {
-    pergunta: 'Sua situação de trabalho hoje:',
-    opcoes: [
-      { texto: 'CLT numa empresa, carteira assinada', pontos: { BOLETO: 2, FAMILIA: 1 } },
-      { texto: 'Empreendedor(a)/dono do próprio negócio', pontos: { CEO: 2, AGRO: 1 } },
-      { texto: 'Autônomo/freelancer, cada mês uma aventura', pontos: { ZAP: 1, VERDE: 1 } },
-      { texto: 'Desempregado(a) ou estudando pra concurso', pontos: { BOLETO: 2, ZAP: 1 } },
-    ],
+    id: 2,
+    categoria: 'economia',
+    texto: 'Aumentar impostos de quem ganha mais pra bancar mais programas sociais.',
+    rotulo: 'Taxar quem ganha mais',
+    sim: { VERDE: 1, ZAP: 1, BOLETO: -1, CEO: -1, AGRO: -1 },
+    nao: { VERDE: -1, ZAP: -1, BOLETO: 1, CEO: 1, AGRO: 1 },
+    pular: {},
   },
   {
-    pergunta: 'Quando o boleto sobe, sua reação é:',
-    opcoes: [
-      { texto: 'Print e mando pro grupo da família reclamando', pontos: { ZAP: 2 } },
-      { texto: 'Abro a planilha e recalculo tudo', pontos: { BOLETO: 2 } },
-      { texto: 'Penso em como isso afeta produção/negócio', pontos: { AGRO: 1, CEO: 1 } },
-      { texto: 'Fico puto mas sigo comprando orgânico', pontos: { VERDE: 2 } },
-    ],
+    id: 3,
+    categoria: 'meio_ambiente',
+    texto: 'Proibir novas áreas de desmatamento pra agropecuária, mesmo reduzindo a produção agrícola no curto prazo.',
+    rotulo: 'Fim de novo desmatamento',
+    sim: { VERDE: 1, AGRO: -1, CEO: -1 },
+    nao: { VERDE: -1, AGRO: 1, CEO: 1 },
+    pular: {},
   },
   {
-    pergunta: 'Sua prioridade nº1 pro país:',
-    opcoes: [
-      { texto: 'Economia estável, juro e imposto baixos', pontos: { BOLETO: 2 } },
-      { texto: 'Meio ambiente e sustentabilidade', pontos: { VERDE: 2 } },
-      { texto: 'Segurança e valores da família', pontos: { FAMILIA: 2 } },
-      { texto: 'Menos governo, mais livre iniciativa', pontos: { CEO: 2 } },
-    ],
+    id: 4,
+    categoria: 'meio_ambiente',
+    texto: 'Priorizar crescimento e emprego mesmo que isso signifique flexibilizar regras ambientais.',
+    rotulo: 'Crescimento acima da regra ambiental',
+    sim: { CEO: 1, AGRO: 1, BOLETO: 1, VERDE: -1 },
+    nao: { CEO: -1, AGRO: -1, BOLETO: -1, VERDE: 1 },
+    pular: {},
   },
   {
-    pergunta: 'Sexta à noite, você está:',
-    opcoes: [
-      { texto: 'Happy hour discutindo política com os amigos', pontos: { ZAP: 1, CEO: 1 } },
-      { texto: 'Em casa com a família, algo tranquilo', pontos: { FAMILIA: 2 } },
-      { texto: 'Numa live/evento sobre empreendedorismo', pontos: { CEO: 2 } },
-      { texto: 'Cuidando do quintal ou da roça', pontos: { VERDE: 1, AGRO: 1 } },
-    ],
+    id: 5,
+    categoria: 'empreendedorismo',
+    texto: 'Reduzir a fiscalização trabalhista sobre pequenas empresas pra facilitar contratação, com menos proteção ao trabalhador.',
+    rotulo: 'Menos fiscalização trabalhista',
+    sim: { CEO: 1, BOLETO: 1, FAMILIA: -1, ZAP: -1 },
+    nao: { CEO: -1, BOLETO: -1, FAMILIA: 1, ZAP: 1 },
+    pular: {},
   },
   {
-    pergunta: 'Rede social que você mais usa:',
-    opcoes: [
-      { texto: 'WhatsApp (os grupos são minha vida)', pontos: { ZAP: 2 } },
-      { texto: 'LinkedIn', pontos: { CEO: 2 } },
-      { texto: 'Instagram, seguindo pauta ambiental/lifestyle', pontos: { VERDE: 2 } },
-      { texto: 'Facebook, pra ver a família e a cidade', pontos: { FAMILIA: 1, AGRO: 1 } },
-    ],
+    id: 6,
+    categoria: 'empreendedorismo',
+    texto: 'Criar mais regras de proteção ao trabalhador, mesmo que fique mais caro contratar.',
+    rotulo: 'Mais proteção trabalhista',
+    sim: { FAMILIA: 1, ZAP: 1, CEO: -1, BOLETO: -1 },
+    nao: { FAMILIA: -1, ZAP: -1, CEO: 1, BOLETO: 1 },
+    pular: {},
   },
   {
-    pergunta: 'Pizza:',
-    opcoes: [
-      { texto: 'Com abacaxi, sem crise', pontos: { VERDE: 1 } },
-      { texto: 'Só a tradicional, do jeito que sempre foi', pontos: { FAMILIA: 1, AGRO: 1 } },
-      { texto: 'Depende da promoção', pontos: { BOLETO: 1 } },
-      { texto: 'Pedi por app enquanto a reunião não acaba', pontos: { CEO: 1, ZAP: 1 } },
-    ],
+    id: 7,
+    categoria: 'seguranca',
+    texto: 'Aumentar bastante o efetivo policial, mesmo cortando orçamento de educação ou saúde pra isso.',
+    rotulo: 'Mais policiamento',
+    sim: { FAMILIA: 1, ZAP: 1, VERDE: -1 },
+    nao: { FAMILIA: -1, ZAP: -1, VERDE: 1 },
+    pular: {},
   },
   {
-    pergunta: 'Se pudesse resolver 1 problema do Brasil amanhã:',
-    opcoes: [
-      { texto: 'Corrupção e gasto público', pontos: { BOLETO: 2, ZAP: 1 } },
-      { texto: 'Desmatamento e crise climática', pontos: { VERDE: 2 } },
-      { texto: 'Violência e segurança pública', pontos: { FAMILIA: 2, AGRO: 1 } },
-      { texto: 'Burocracia que trava quem quer empreender', pontos: { CEO: 2 } },
-    ],
+    id: 8,
+    categoria: 'seguranca',
+    texto: 'Priorizar prevenção social (educação, esporte, renda) em vez de mais policiamento como resposta ao crime.',
+    rotulo: 'Prevenção social',
+    sim: { VERDE: 1, FAMILIA: -1, ZAP: -1 },
+    nao: { VERDE: -1, FAMILIA: 1, ZAP: 1 },
+    pular: {},
+  },
+  {
+    id: 9,
+    categoria: 'comunicacao',
+    texto: 'O governo poder monitorar mais as redes pra combater fake news, mesmo limitando um pouco a liberdade de expressão.',
+    rotulo: 'Monitorar redes sociais',
+    sim: { FAMILIA: 1, ZAP: -1, CEO: -1 },
+    nao: { FAMILIA: -1, ZAP: 1, CEO: 1 },
+    pular: {},
+  },
+  {
+    id: 10,
+    categoria: 'comunicacao',
+    texto: 'Cortar gastos do governo com marketing institucional, mesmo reduzindo a visibilidade de campanhas públicas úteis.',
+    rotulo: 'Corte de marketing institucional',
+    sim: { BOLETO: 1, CEO: 1, ZAP: -1 },
+    nao: { BOLETO: -1, CEO: -1, ZAP: 1 },
+    pular: {},
+  },
+  {
+    id: 11,
+    categoria: 'campo',
+    texto: 'Priorizar grandes exportações do agronegócio, mesmo concentrando mais terra e renda no setor.',
+    rotulo: 'Exportação do agronegócio',
+    sim: { AGRO: 1, CEO: 1, VERDE: -1, ZAP: -1 },
+    nao: { AGRO: -1, CEO: -1, VERDE: 1, ZAP: 1 },
+    pular: {},
+  },
+  {
+    id: 12,
+    categoria: 'campo',
+    texto: 'Priorizar reforma agrária e distribuição de terra pra pequenos agricultores, reduzindo área das grandes propriedades.',
+    rotulo: 'Reforma agrária',
+    sim: { VERDE: 1, ZAP: 1, AGRO: -1, CEO: -1 },
+    nao: { VERDE: -1, ZAP: -1, AGRO: 1, CEO: 1 },
+    pular: {},
   },
 ];

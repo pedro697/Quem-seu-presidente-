@@ -32,7 +32,7 @@
 
   /**
    * Recebe o lead capturado no quiz e cuida do envio/armazenamento.
-   * @param {{nome: string, whatsapp: string, email: string, resultado: string, ondeMora: string, situacaoTrabalho: string, timestamp: string}} data
+   * @param {{nome: string, whatsapp: string, email: string, resultado: string, compatibilidade: number, ondeMora: string, situacaoTrabalho: string, faixaEtaria: string, plataforma: string, timestamp: string}} data
    * @returns {Promise<boolean>} sucesso do processamento local (sempre true, mesmo sem endpoint remoto ainda)
    */
   async function submitLead(data) {
@@ -59,7 +59,7 @@
 
   /**
    * Insere o lead na tabela "leads" do Supabase (ver supabase-schema.sql).
-   * @param {{nome: string, whatsapp: string, email: string, resultado: string, ondeMora: string, situacaoTrabalho: string}} data
+   * @param {{nome: string, whatsapp: string, email: string, resultado: string, compatibilidade: number, ondeMora: string, situacaoTrabalho: string, faixaEtaria: string, plataforma: string}} data
    */
   async function enviarLeadParaSupabase(data) {
     const { error } = await supabaseClient.from('leads').insert([
@@ -68,8 +68,11 @@
         whatsapp: data.whatsapp,
         email: data.email || null,
         resultado: data.resultado,
+        compatibilidade: typeof data.compatibilidade === 'number' ? data.compatibilidade : null,
         onde_mora: data.ondeMora || null,
         situacao_trabalho: data.situacaoTrabalho || null,
+        faixa_etaria: data.faixaEtaria || null,
+        plataforma: data.plataforma || null,
       },
     ]);
 

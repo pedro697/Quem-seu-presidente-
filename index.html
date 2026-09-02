@@ -5,18 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Qual é o seu Presidente Ideal? | Quiz</title>
-  <meta name="description" content="Responda 8 perguntas e descubra qual arquétipo fictício combina mais com você." />
+  <meta name="description" content="Responda algumas propostas e descubra com qual presidente fictício você daria match." />
 
   <!-- Open Graph básico -->
   <!-- TODO: adicionar og:image e og:url quando o domínio final estiver definido -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Qual é o seu Presidente Ideal? | Quiz" />
-  <meta property="og:description" content="Responda 8 perguntas e descubra qual arquétipo fictício combina mais com você." />
+  <meta property="og:description" content="Responda algumas propostas e descubra com qual presidente fictício você daria match." />
 
   <!-- Twitter Card básico -->
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Qual é o seu Presidente Ideal? | Quiz" />
-  <meta name="twitter:description" content="Responda 8 perguntas e descubra qual arquétipo fictício combina mais com você." />
+  <meta name="twitter:description" content="Responda algumas propostas e descubra com qual presidente fictício você daria match." />
 
   <!-- Fonte do Google Fonts (opcional — o site funciona offline sem ela também) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -34,46 +34,91 @@
       <div class="conteudo-inicio">
         <span class="badge-quiz">QUIZ</span>
         <h1>Qual é o seu Presidente Ideal?</h1>
+        <p class="subtitulo-destaque">8+ escolhas. 6 perfis fictícios. 1 match.</p>
         <p class="subtitulo">
-          Responda 8 perguntas completamente questionáveis e descubra qual arquétipo
-          político fictício combina com você.
+          Responda algumas propostas, faça escolhas rápidas e descubra qual presidente
+          fictício mais combina com suas respostas.
         </p>
-        <button id="btn-comecar" class="botao-primario">Começar o quiz →</button>
-        <p class="nota-rodape">Quiz fictício. Feito para entretenimento.</p>
+        <button id="btn-comecar" class="botao-primario">Descobrir meu match →</button>
+        <p class="nota-rodape">Quiz fictício e feito para entretenimento.</p>
       </div>
     </section>
 
-    <!-- Tela 2: Perguntas -->
+    <!-- Tela 2: Explicação rápida -->
+    <section id="tela-explicacao" class="tela">
+      <div class="conteudo-explicacao">
+        <span class="badge-quiz">COMO FUNCIONA</span>
+        <h2>Rápido e sem enrolação</h2>
+        <ul class="lista-explicacao">
+          <li>💬 Você vai ver algumas propostas fictícias.</li>
+          <li>❤️ SIM se concorda, ❌ NÃO se discorda, ➡️ PULE se for indiferente.</li>
+          <li>🏆 No final, revelamos qual presidente fictício mais combina com você.</li>
+        </ul>
+        <button id="btn-continuar-explicacao" class="botao-primario">Bora começar →</button>
+      </div>
+    </section>
+
+    <!-- Tela 3: Propostas e perguntas de perfil (tela genérica reaproveitada nas duas fases) -->
     <section id="tela-perguntas" class="tela" aria-labelledby="texto-pergunta">
       <button id="btn-voltar" type="button" class="botao-voltar" hidden aria-label="Voltar para a pergunta anterior">
         ← Voltar
       </button>
 
-      <div class="barra-progresso-container" role="progressbar" aria-valuemin="1" aria-valuemax="8" aria-valuenow="1" aria-label="Progresso do quiz">
+      <div class="barra-progresso-container" role="progressbar" aria-valuemin="1" aria-valuemax="12" aria-valuenow="1" aria-label="Progresso">
         <div class="barra-progresso-preenchida" id="barra-progresso"></div>
       </div>
 
       <div id="conteudo-pergunta">
-        <p class="contador-perguntas" id="contador-perguntas">PERGUNTA 1 DE 8</p>
+        <p class="contador-perguntas" id="contador-perguntas">PROPOSTA 1 DE 12</p>
+        <span class="categoria-chip" id="categoria-chip" hidden></span>
         <h2 id="texto-pergunta" class="texto-pergunta" tabindex="-1"></h2>
-        <div id="lista-opcoes" class="lista-opcoes" role="group"></div>
+        <div id="area-resposta" class="area-resposta"></div>
       </div>
     </section>
 
-    <!-- Tela 3: Captura de lead -->
+    <!-- Tela 4: Transição pra perguntas de perfil -->
+    <section id="tela-perfil-transicao" class="tela">
+      <div class="conteudo-transicao">
+        <span class="emoji-topo">👀</span>
+        <h2>Última etapa</h2>
+        <p>
+          Antes de revelar seu match, queremos conhecer um pouquinho quem está
+          fazendo o teste.
+        </p>
+        <button id="btn-continuar-perfil" class="botao-primario">Continuar →</button>
+      </div>
+    </section>
+
+    <!-- Tela 5: Captura de nome (personaliza o resto da experiência) -->
+    <section id="tela-nome" class="tela">
+      <div class="conteudo-nome">
+        <span class="emoji-topo">✍️</span>
+        <h2>Como podemos te chamar?</h2>
+        <form id="form-nome" class="form-lead" novalidate>
+          <div class="campo-lead">
+            <input
+              type="text"
+              id="input-nome-usuario"
+              name="nomeUsuario"
+              placeholder="Seu nome"
+              aria-label="Seu nome"
+              required
+            />
+            <span class="erro-campo" id="erro-nome-usuario" aria-live="polite"></span>
+          </div>
+          <button type="submit" class="botao-primario">Revelar meu match →</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Tela 6: Captura de lead (WhatsApp + e-mail opcional) -->
     <section id="tela-lead" class="tela">
       <div class="conteudo-lead">
-        <h2>Seu resultado está pronto 👀</h2>
+        <h2>Quer receber seu resultado completo?</h2>
         <p>
-          Quer receber seu resultado completo e um raio-x da sua personalidade
-          financeiro-política no WhatsApp?
+          Envie seu WhatsApp para receber seu resultado e poder acessar novamente depois.
         </p>
         <form id="form-lead" class="form-lead" novalidate>
-          <div class="campo-lead">
-            <label for="input-nome">Nome</label>
-            <input type="text" id="input-nome" name="nome" placeholder="Seu nome" required />
-            <span class="erro-campo" id="erro-nome" aria-live="polite"></span>
-          </div>
           <div class="campo-lead">
             <label for="input-whatsapp">WhatsApp</label>
             <input type="tel" id="input-whatsapp" name="whatsapp" placeholder="(11) 91234-5678" inputmode="numeric" required />
@@ -84,37 +129,51 @@
             <input type="email" id="input-email" name="email" placeholder="Seu e-mail" />
             <span class="erro-campo" id="erro-email" aria-live="polite"></span>
           </div>
-          <button type="submit" id="btn-enviar-lead" class="botao-primario">Ver meu resultado</button>
+          <button type="submit" id="btn-enviar-lead" class="botao-primario">Revelar meu resultado →</button>
         </form>
         <a href="#" id="link-pular" class="link-pular">Só quero ver meu resultado</a>
         <p class="nota-privacidade">
-          Seus dados serão usados apenas para enviar seu resultado e comunicações da NEXA.
+          Seus dados serão usados para enviar seu resultado e comunicações da NEXA,
+          conforme nossa política de privacidade.
         </p>
       </div>
     </section>
 
-    <!-- Tela 4: Resultado -->
-    <section id="tela-resultado" class="tela">
-      <p class="rotulo-secao">SEU RESULTADO</p>
+    <!-- Tela 7: Suspense curto antes do resultado -->
+    <section id="tela-analisando" class="tela">
+      <div class="conteudo-analisando">
+        <div class="spinner-analisando" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <p id="texto-analisando" class="texto-analisando">Analisando suas escolhas...</p>
+      </div>
+    </section>
 
+    <!-- Tela 8: Resultado / match -->
+    <section id="tela-resultado" class="tela">
       <div class="card-resultado" id="card-resultado">
+        <p class="rotulo-match">🏆 MATCH ENCONTRADO</p>
+        <p class="intro-resultado" id="intro-resultado"></p>
         <span class="emoji-resultado" id="resultado-emoji"></span>
-        <h2 id="resultado-nome"></h2>
+        <h2 id="resultado-nome-presidente"></h2>
+        <p class="resultado-perfil" id="resultado-nome-perfil"></p>
+        <p class="resultado-compatibilidade" id="resultado-compatibilidade"></p>
         <p class="resultado-tagline" id="resultado-tagline"></p>
-        <p class="resultado-descricao" id="resultado-descricao"></p>
+        <p class="resultado-disclaimer">Personagem fictício, sem relação com pessoas reais.</p>
       </div>
 
       <div class="perfil-resultado">
         <p class="rotulo-secao">SEU PERFIL</p>
-        <div class="barra-compatibilidade-container" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Percentual de compatibilidade com o arquétipo">
-          <div class="barra-compatibilidade-preenchida" id="barra-compatibilidade"></div>
-        </div>
-        <p class="texto-compatibilidade" id="texto-compatibilidade"></p>
-        <ul class="lista-caracteristicas" id="lista-caracteristicas"></ul>
+        <div id="lista-categorias" class="lista-categorias"></div>
+      </div>
+
+      <div class="perfil-resultado">
+        <p class="rotulo-secao">POR QUE DEU MATCH?</p>
+        <ul class="lista-caracteristicas" id="lista-motivos"></ul>
       </div>
 
       <div class="acoes-resultado">
-        <button id="btn-compartilhar" class="botao-primario">Compartilhar meu resultado</button>
+        <button id="btn-compartilhar" class="botao-primario">🔥 Compartilhar meu resultado</button>
         <button id="btn-refazer" class="botao-secundario">Refazer quiz</button>
         <p class="feedback-compartilhar" id="feedback-compartilhar" aria-live="polite"></p>
       </div>
@@ -130,6 +189,7 @@
   <!-- Ordem importa: dados primeiro, depois lead-handler, depois a lógica principal -->
   <script src="archetypes.js"></script>
   <script src="questions.js"></script>
+  <script src="profile-questions.js"></script>
   <script src="lead-handler.js"></script>
   <script src="script.js"></script>
 </body>
